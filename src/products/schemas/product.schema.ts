@@ -12,13 +12,13 @@ import { Document } from 'mongoose';
   },
 })
 export class Product {
-  @Prop()
+  @Prop({required: true})
   name: string;
 
   @Prop()
   description: string;
 
-  @Prop()
+  @Prop({required: true})
   price: number;
 
   @Prop()
