@@ -19,7 +19,9 @@ import { ProductsService } from './products.service';
 import { CreateProductDto } from './products.dto';
 import { AdminGuard, UserGuard } from '../users/utils/authenticator.guard';
 import { UsersService } from '../users/users.service';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 
+@ApiTags('ecommerce')
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService,
@@ -51,6 +53,9 @@ export class ProductsController {
   }
 
   @Get()
+  @ApiTags('ecommerce')
+  @ApiOperation({ summary: 'Get all products' })
+  @ApiResponse({ status: 200, description: 'List of products' })
   async getAllProductsUnregisted(
     @Query('limit', new ParseIntPipe({ optional: true })) limit: number = 10,
     @Query('page', new ParseIntPipe({ optional: true })) page: number = 1,
