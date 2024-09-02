@@ -65,9 +65,10 @@ npm install
 
 Create a .env file in the root directory and add the following environment variables:
 ```
-MONGODB_URI=mongodb://localhost/ecommerce
+MONGO_URI= mongodb://localhost/ecommerce
+PASSWORD_SALT=SALT
 JWT_SECRET=your_jwt_secret
-PORT=3000
+JWT_EXPIRES_IN=3d
 ```
 
 - **MONGODB_URI**: The connection string for your MongoDB instance.
