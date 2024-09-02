@@ -114,6 +114,7 @@ npm run test:cov
 - Commit your changes (git commit -m 'Add some feature').
 - Push to the branch (git push origin feature/your-feature-name).
 - Open a pull request.
-**Submission Dates:** Submission should be made ON OR BEFORE MONDAY, 2ND SEPTEMBER, 2024
+## Submission Dates:
+  Submission should be made ON OR BEFORE MONDAY, 2ND SEPTEMBER, 2024
 ## License
 This project is licensed under the MIT License. See the LICENSE file for more details.
