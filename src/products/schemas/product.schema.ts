@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { User } from '../../users/schemas/user.schema';
 
 @Schema({
   timestamps: true,
@@ -14,7 +15,7 @@ import { Document } from 'mongoose';
 export class Product {
   @Prop({ required: true })
   SKU: string;
-  
+
   @Prop({required: true})
   name: string;
 
@@ -29,6 +30,9 @@ export class Product {
 
   @Prop()
   isApproved: boolean;
+
+  @Prop({ Ref: User})
+  user: string;
 }
 
 export type ProductDocument = Product & Document;

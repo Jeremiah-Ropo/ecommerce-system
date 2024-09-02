@@ -13,20 +13,27 @@ import {
   Param,
   Delete,
   UsePipes,
+  Req,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './products.dto';
 import { AdminGuard, UserGuard } from '../users/utils/authenticator.guard';
+import { UsersService } from '../users/users.service';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(private readonly productsService: ProductsService,
+    private readonly usersService: UsersService
+  ) {}
 
   @Post()
   @UseGuards(UserGuard)
   @UsePipes(new ValidationPipe({ whitelist: true }))
-  async createProduct(@Body() createProduct: CreateProductDto) {
+  async createProduct(@Body() createProduct: CreateProductDto, @Req() request) {
     try {
+      const { id } = request.user
+      const user = await this.usersService.findById(id);
+      if (!user) throw new HttpException("User not found", HttpStatus.BAD_REQUEST)
       const product = await this.productsService.findOne({
         SKU: createProduct.SKU,
       });
@@ -36,7 +43,8 @@ export class ProductsController {
           HttpStatus.BAD_REQUEST,
         );
       }
-      return this.productsService.create(createProduct);
+      
+      return this.productsService.create({user: id, ...createProduct});
     } catch (error) {
       throw new HttpException(error.message, error.status);
     }

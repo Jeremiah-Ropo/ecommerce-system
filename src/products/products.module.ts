@@ -6,11 +6,12 @@ import { Product, ProductSchema } from './schemas/product.schema';
 import { AdminGuard, UserGuard } from 'src/users/utils/authenticator.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { UsersModule } from '../users/users.module';
 
 @Module({
   providers: [ProductsService, UserGuard, AdminGuard],
   controllers: [ProductsController],
-  imports: [MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
+  imports: [  UsersModule, MongooseModule.forFeature([{ name: Product.name, schema: ProductSchema }]),
   ConfigModule.forRoot(),
   JwtModule.registerAsync({
     imports: [ConfigModule],
