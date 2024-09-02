@@ -23,6 +23,9 @@ export class Product {
 
   @Prop()
   quantity: number;
+
+  @Prop()
+  isApproved: boolean;
 }
 
 export type ProductDocument = Product & Document;

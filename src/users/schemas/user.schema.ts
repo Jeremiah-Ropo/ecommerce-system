@@ -21,6 +21,12 @@ export class User {
 
   @Prop({required: true})
   password: string;
+
+  @Prop({default: 'user', enum: ['user', 'admin']})
+  role: string;
+
+  @Prop({ default: false })
+  banned: boolean;
 }
 
 export type UserDocument = User & Document;

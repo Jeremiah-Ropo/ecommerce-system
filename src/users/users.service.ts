@@ -14,6 +14,7 @@ export class UsersService {
       username: userDto.username,
       password: userDto.password,
       email: userDto.email,
+      role: userDto.role,
     };
     const user = await this.userModel.create(userPayload);
     return user;
@@ -35,8 +36,9 @@ export class UsersService {
   }
 
   async updateById(id: any, payload: any): Promise<User> {
+    console.log(id, payload);
     const updatedUser = await this.userModel
-      .findByIdAndUpdate(id, payload, { new: true })
+      .findByIdAndUpdate({_id: id}, payload, { new: true })
       .exec();
     return updatedUser;
   }
