@@ -24,8 +24,13 @@ export class ProductsService {
     return products;
   }
 
-  async findOne(id: string): Promise<Product> {
+  async findById(id: string): Promise<Product> {
     const product = await this.productModel.findById(id).exec();
+    return product;
+  }
+
+  async findOne(query: any): Promise<Product> {
+    const product = await this.productModel.findOne(query).exec();
     return product;
   }
 

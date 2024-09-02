@@ -12,6 +12,9 @@ import { Document } from 'mongoose';
   },
 })
 export class Product {
+  @Prop({ required: true })
+  SKU: string;
+  
   @Prop({required: true})
   name: string;
 
