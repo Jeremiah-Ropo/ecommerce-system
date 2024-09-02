@@ -12,6 +12,7 @@ import {
   Patch,
   Param,
   Delete,
+  UsePipes,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './products.dto';
@@ -23,16 +24,22 @@ export class ProductsController {
 
   @Post()
   @UseGuards(UserGuard)
-  async createProduct(
-    @Body(ValidationPipe) createProductDto: CreateProductDto,
-  ) {
-    const product = await this.productsService.findOne({
-      SKU: createProductDto.SKU,
-    });
-    if (product) {
-      throw new HttpException('Product already exists', HttpStatus.BAD_REQUEST);
+  @UsePipes(new ValidationPipe({ whitelist: true }))
+  async createProduct(@Body() createProduct: CreateProductDto) {
+    try {
+      const product = await this.productsService.findOne({
+        SKU: createProduct.SKU,
+      });
+      if (product) {
+        throw new HttpException(
+          'Product already exists',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      return this.productsService.create(createProduct);
+    } catch (error) {
+      throw new HttpException(error.message, error.status);
     }
-    return this.productsService.create(createProductDto);
   }
 
   @Get()
@@ -52,7 +59,7 @@ export class ProductsController {
       if (isApproved) query['isApproved'] = isApproved;
       return this.productsService.findAll(query, { limit, page });
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -72,7 +79,7 @@ export class ProductsController {
       if (isApproved) query['isApproved'] = isApproved;
       return this.productsService.findAll(query, { limit, page });
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -89,7 +96,7 @@ export class ProductsController {
       }
       return this.productsService.update(id, { isApproved });
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -106,7 +113,7 @@ export class ProductsController {
       }
       return this.productsService.update(id, updateProductDto);
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -120,7 +127,7 @@ export class ProductsController {
       }
       return product;
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 
@@ -134,7 +141,7 @@ export class ProductsController {
       }
       return this.productsService.delete(id);
     } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status);
     }
   }
 }
