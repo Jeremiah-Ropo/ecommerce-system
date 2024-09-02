@@ -36,10 +36,31 @@ export class ProductsController {
   }
 
   @Get()
+  async getAllProductsUnregisted(
+    @Query('limit', new ParseIntPipe({ optional: true })) limit: number = 10,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number = 1,
+    @Query('name') name?: string,
+    @Query('price') price?: number,
+    @Query('isApproved') isApproved?: boolean,
+  ) {
+    try {
+      const query = {
+        isApproved: true,
+      };
+      if (name) query['name'] = name;
+      if (price) query['price'] = price;
+      if (isApproved) query['isApproved'] = isApproved;
+      return this.productsService.findAll(query, { limit, page });
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @Get('all')
   @UseGuards(UserGuard)
-  async getProducts(
-    @Query('limit', ParseIntPipe) limit: number = 10,
-    @Query('page', ParseIntPipe) page: number = 1,
+  async getAllUserProducts(
+    @Query('limit', new ParseIntPipe({ optional: true })) limit: number = 10,
+    @Query('page', new ParseIntPipe({ optional: true })) page: number = 1,
     @Query('name') name?: string,
     @Query('price') price?: number,
     @Query('isApproved') isApproved?: boolean,

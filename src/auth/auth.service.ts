@@ -26,8 +26,7 @@ export class AuthService {
     }
   }
 
-  async login(user: any) {   
-      console.log(user);
+  async login(user: any) { 
     const payload = { email: user.email, id: user._id, role: user.role };
     let jwtOptions = {
       expiresIn: this.configService.get('JWT_EXPIRES_IN'),

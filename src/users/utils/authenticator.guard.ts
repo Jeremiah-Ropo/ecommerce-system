@@ -10,21 +10,23 @@ export class AdminGuard implements CanActivate {
     const request: Request = context.switchToHttp().getRequest();
     const authorizationHeader = request.headers['authorization'];
     if (!authorizationHeader) {
-      throw new HttpException('No authorization header provided', HttpStatus.UNAUTHORIZED);
+      throw new UnauthorizedException('No authorization header provided');
     }
     
     const token = authorizationHeader.split(' ')[1];
     try {
       // Verify token
       const payload = await this.jwtService.verifyAsync(token); 
-      
+      if (!payload) {
+        throw new UnauthorizedException('Expired or Invalid token');
+      }
       if (payload.role !== 'admin') {
         throw new UnauthorizedException('You do not have permission to access this resource');
       }
       
       return true;
     } catch (error) {
-      throw new UnauthorizedException('You do not have permission to access this resource');
+      throw new UnauthorizedException(error.message);
     }
   }
 
@@ -47,13 +49,13 @@ export class UserGuard implements CanActivate {
       const payload = await this.jwtService.verifyAsync(token); 
       
       if (!payload) {
-        throw new UnauthorizedException('Invalid token');
+        throw new UnauthorizedException('Expired or Invalid token');
       }
       const { exp, iat, ...user } = payload;
       request.user = user;
       return true;
     } catch (error) {
-      throw new UnauthorizedException('You do not have permission to access this resource');
+      throw new UnauthorizedException(error.message);
     }
   }
 
