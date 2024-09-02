@@ -71,9 +71,10 @@ JWT_SECRET=your_jwt_secret
 JWT_EXPIRES_IN=3d
 ```
 
-- **MONGODB_URI**: The connection string for your MongoDB instance.
+- **MONGO_URI:** The connection string for your MongoDB instance.
 - **JWT_SECRET:** A secret key for signing JSON Web Tokens.
-- **PORT:** The port number for the application (default is 3000).
+- **PASSWORD_SALT:** A salt for hashing the password.
+- **JWT_EXPIRES_IN:** An expires in for expiring JSON Web Tokens.
   
 ## Running the Application Locally
 ### Start the MongoDB server:
